@@ -181,3 +181,354 @@ flowchart LR
     G --> H[Business Insights]
     H --> I[Power BI Dashboard]
     I --> J[Business Recommendations]
+
+### 1. Data Ingestion
+
+Multiple raw CSV files were loaded into an SQLite database using Python and SQLAlchemy.
+
+Using a relational database made it easier to manage large datasets, perform joins, create reusable analytical tables, and maintain a structured analysis workflow.
+
+### 2. SQL Exploration and Transformation
+
+SQL was used to:
+
+- Explore database tables and understand their relationships
+- Identify missing, duplicated, and inconsistent values
+- Join purchasing, sales, vendor, pricing, and inventory data
+- Aggregate vendor- and brand-level performance
+- Create a consolidated `Vendor Sales Summary` table for further analysis
+
+### 3. Exploratory Data Analysis
+
+Python and Pandas were used to:
+
+- Analyze data distributions and outliers
+- Evaluate vendor and brand performance
+- Measure purchasing concentration
+- Analyze inventory turnover
+- Identify low-sales, high-margin brands
+- Study relationships between sales, purchases, costs, and profitability
+
+### 4. Statistical Validation
+
+Confidence intervals and hypothesis testing were used to compare profitability between vendor groups and determine whether the observed differences were statistically meaningful.
+
+### 5. Power BI Dashboard
+
+The final analytical dataset was imported into Power BI to create an interactive dashboard containing:
+
+- Executive KPI cards
+- Top vendor and brand rankings
+- Vendor purchase concentration
+- Inventory turnover analysis
+- Unsold inventory capital
+- Profitability and sales opportunity analysis
+
+---
+
+## 🛠️ Technology Stack
+
+| Category | Tools |
+|---|---|
+| Programming | Python |
+| Data Manipulation | Pandas, NumPy |
+| Database | SQLite |
+| Database Integration | SQLAlchemy |
+| Querying and Transformation | SQL |
+| Data Visualization | Matplotlib, Seaborn |
+| Statistical Analysis | SciPy |
+| Dashboarding | Microsoft Power BI, DAX |
+| Development Environment | Jupyter Notebook |
+| Version Control | Git, GitHub |
+
+---
+
+## 📁 Project Structure
+
+```text
+VendorIQ/
+│
+├── assets/
+│   └── vendoriq_dashboard.png
+│
+├── data/
+│   └── raw CSV files
+│
+├── database/
+│   └── vendor_inventory.db
+│
+├── notebooks/
+│   ├── 01_data_ingestion.ipynb
+│   ├── 02_database_exploration.ipynb
+│   └── 03_vendor_performance_eda.ipynb
+│
+├── sql/
+│   └── vendor_sales_summary.sql
+│
+├── dashboard/
+│   └── VendorIQ_Dashboard.pbix
+│
+├── reports/
+│   └── vendor_performance_report.pdf
+│
+├── README.md
+├── requirements.txt
+└── .gitignore
+```
+
+> Raw datasets and the generated SQLite database are excluded from GitHub because of file-size and data-distribution constraints.
+
+---
+
+## 📊 Dashboard Components
+
+### Executive KPI Cards
+
+The dashboard tracks the following business metrics:
+
+- Total Sales
+- Total Purchases
+- Gross Profit
+- Profit Margin
+- Unsold Inventory Capital
+
+### Vendor Performance
+
+Vendor performance is evaluated using:
+
+- Total sales
+- Total purchases
+- Gross profit
+- Profit margin
+- Purchase contribution
+- Inventory turnover
+
+### Brand Performance
+
+The dashboard identifies:
+
+- Top-selling brands
+- Low-sales, high-margin brands
+- Brands requiring pricing adjustments
+- Products with potential promotional opportunities
+
+### Inventory Analysis
+
+Inventory efficiency is monitored using:
+
+- Stock turnover
+- Unsold inventory value
+- Slow-moving vendors
+- Capital locked in inventory
+
+---
+
+## 📐 Power BI Measures
+
+The following DAX measures were used to calculate the major dashboard KPIs.
+
+```DAX
+Total Sales =
+SUM('VendorSalesSummary'[TotalSalesDollars])
+```
+
+```DAX
+Total Purchases =
+SUM('VendorSalesSummary'[TotalPurchaseDollars])
+```
+
+```DAX
+Gross Profit =
+SUM('VendorSalesSummary'[GrossProfit])
+```
+
+```DAX
+Profit Margin % =
+DIVIDE(
+    [Gross Profit],
+    [Total Sales],
+    0
+)
+```
+
+```DAX
+Unsold Inventory Capital =
+SUM('VendorSalesSummary'[UnsoldInventoryValue])
+```
+
+```DAX
+Average Stock Turnover =
+AVERAGE('VendorSalesSummary'[StockTurnover])
+```
+
+> Table and column names may need to be adjusted according to the final Power BI data model.
+
+---
+
+## 🚀 How to Run the Project
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/anupam-devcodes/VendorIQ.git
+cd VendorIQ
+```
+
+### 2. Create a virtual environment
+
+```bash
+python -m venv venv
+```
+
+### 3. Activate the virtual environment
+
+#### Windows
+
+```bash
+venv\Scripts\activate
+```
+
+#### macOS/Linux
+
+```bash
+source venv/bin/activate
+```
+
+### 4. Install the required dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Add the source datasets
+
+Place the required CSV files inside the following directory:
+
+```text
+data/
+```
+
+The raw datasets are not included in the repository.
+
+### 6. Run the notebooks in sequence
+
+Run the notebooks in the following order:
+
+```text
+notebooks/01_data_ingestion.ipynb
+notebooks/02_database_exploration.ipynb
+notebooks/03_vendor_performance_eda.ipynb
+```
+
+### 7. Open the Power BI dashboard
+
+Open the following file using Microsoft Power BI Desktop:
+
+```text
+dashboard/VendorIQ_Dashboard.pbix
+```
+
+Update the local data-source path if required.
+
+---
+
+## ✅ Business Recommendations
+
+Based on the analysis, the following actions are recommended:
+
+1. **Promote high-margin brands with low sales**
+
+   Develop targeted promotional campaigns, improve product visibility, and evaluate pricing for the 198 identified brands.
+
+2. **Reduce vendor concentration risk**
+
+   Explore alternative suppliers and gradually diversify purchases to reduce dependence on the top 10 vendors.
+
+3. **Use bulk purchasing strategically**
+
+   Larger orders provide lower unit costs, but purchase volumes should be aligned with demand forecasts and inventory capacity.
+
+4. **Reduce slow-moving inventory**
+
+   Review reorder quantities, introduce clearance strategies, and avoid excessive purchasing from low-turnover vendors.
+
+5. **Improve vendor negotiation strategies**
+
+   Use purchasing volume, profitability, and inventory performance to negotiate better pricing and contract terms.
+
+6. **Support high-margin, low-volume vendors**
+
+   Investigate whether low sales are caused by limited market reach, weak distribution, insufficient promotion, or pricing issues.
+
+7. **Monitor unsold inventory continuously**
+
+   Track inventory capital through the Power BI dashboard to identify slow-moving products before they become a major financial risk.
+
+---
+
+## 🎓 Skills Demonstrated
+
+This project demonstrates practical experience in:
+
+- Translating business problems into analytical questions
+- Building an end-to-end analytics workflow
+- Ingesting multiple datasets into a relational database
+- Writing SQL joins, aggregations, CTEs, and transformations
+- Creating a consolidated analytical data model
+- Performing exploratory data analysis
+- Detecting outliers and analyzing distributions
+- Conducting confidence interval and hypothesis testing
+- Developing business KPIs
+- Building an interactive Power BI dashboard
+- Communicating insights through business recommendations
+- Organizing and documenting an analytics project on GitHub
+
+---
+
+## ⚠️ Limitations
+
+- The analysis is based on historical data and does not establish causality.
+- Vendor performance may also be affected by seasonality, location, promotions, customer demand, and market conditions.
+- Profitability calculations depend on the purchasing and sales fields available in the source dataset.
+- Operating expenses, logistics costs, and contractual terms may not be included.
+- The complete raw dataset is not publicly included in the repository.
+
+---
+
+## 🔮 Future Improvements
+
+Potential future enhancements include:
+
+- Vendor risk scoring
+- Product-level demand forecasting
+- Sales and purchase trend analysis over time
+- Reorder-point recommendations
+- Inventory optimization models
+- Seasonal product analysis
+- Geographic performance analysis
+- Automated database refreshes
+- Automated Power BI dataset refreshes
+- Power BI Service deployment
+- Vendor segmentation using machine-learning techniques
+
+---
+
+## 👨‍💻 Author
+
+### Anupam Choubey
+
+Final-year engineering student focused on data analytics, business intelligence, SQL, Python, and analytical problem-solving.
+
+- **GitHub:** [anupam-devcodes](https://github.com/anupam-devcodes)
+- **Project:** VendorIQ — Retail Vendor Performance & Profitability Intelligence
+
+---
+
+<div align="center">
+
+### ⭐ If you found this project useful, consider giving the repository a star.
+
+**Built with SQL, Python, statistical analysis, and Power BI.**
+
+</div>
+
